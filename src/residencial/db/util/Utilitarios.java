@@ -33,7 +33,7 @@ public class Utilitarios {
       
     //PEGA DATA E HORA ATUAIS
     public String getDateTime() { 
-	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); 
+	DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy"); 
 	Date date = new Date(); 
 	return dateFormat.format(date); 
     }

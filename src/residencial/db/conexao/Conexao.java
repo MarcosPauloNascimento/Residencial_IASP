@@ -25,7 +25,7 @@ public class Conexao {
 	public Connection abrir(){
 		try{
 			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://localhost:3306/residencial_iasp";
+			String url = "jdbc:mysql://127.0.0.1:3306/residencial_iasp";
 			con = DriverManager.getConnection(url,"root","adm");
                         
                         return con;

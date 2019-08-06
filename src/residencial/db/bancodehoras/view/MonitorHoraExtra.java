@@ -7,11 +7,22 @@ package residencial.db.bancodehoras.view;
 
 import residencial.db.util.Utilitarios;
 import java.awt.Color;
+import static java.awt.SystemColor.window;
+import java.awt.Window;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.stage.FileChooser;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import residencial.db.bancodehoras.dao.BancoDeHoras;
+import residencial.db.relatorios.RelHoraExtraMonitora;
 
 /**
  *
@@ -21,19 +32,23 @@ public class MonitorHoraExtra extends JInternalFrame {
 
     DefaultTableModel modelo;
     Utilitarios util = new Utilitarios();
-    BancoDeHoras banco = new BancoDeHoras();    
-    boolean click = false;
-    
+    BancoDeHoras banco = new BancoDeHoras();
+    RelHoraExtraMonitora rel = new RelHoraExtraMonitora();
+    boolean click = false, imprimeTodas = false, atualizar = false;
+    String[] dadosMonitora;
+    String nomeRelatorio;
+
     public MonitorHoraExtra() {
         initComponents();
-        modelo = (DefaultTableModel)tbDados.getModel();
+        modelo = (DefaultTableModel) tbDados.getModel();
         modelo.setNumRows(0);
-        lbStatus.setVisible(false);
-        lbHoraExtra.setVisible(false);        
+        lbStatus.setText("Selecione uma monitora");
+        lbHoraExtra.setText("para calcular as horas extras.");
         util.preecheComboMonitora(cbMonitoras);
-        
-        
-        
+        btImprimir.setBackground(new Color(0, 0, 0, 0));
+        btSelecionaDiretorio.setBackground(new Color(0, 0, 0, 0));
+        tfDiretorio.setText(banco.selectSource());
+        tfDiretorio.setToolTipText(tfDiretorio.getText());
     }
 
     /**
@@ -44,18 +59,161 @@ public class MonitorHoraExtra extends JInternalFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tbDados = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         cbMonitoras = new javax.swing.JComboBox<>();
-        jPanel4 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        btImprimir = new javax.swing.JButton();
+        panelStatus = new javax.swing.JPanel();
         lbStatus = new javax.swing.JLabel();
         lbHoraExtra = new javax.swing.JLabel();
+        cbImprimirTodas = new javax.swing.JCheckBox();
+        jLabel3 = new javax.swing.JLabel();
+        tfDiretorio = new javax.swing.JTextField();
+        btSelecionaDiretorio = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbDados = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
 
-        tbDados.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        setBackground(new java.awt.Color(255, 255, 255));
+        getContentPane().setLayout(new java.awt.GridBagLayout());
+
+        jPanel2.setBackground(new java.awt.Color(102, 0, 180));
+        jPanel2.setMinimumSize(new java.awt.Dimension(743, 288));
+        jPanel2.setPreferredSize(new java.awt.Dimension(354, 380));
+
+        cbMonitoras.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        cbMonitoras.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbMonitorasMouseClicked(evt);
+            }
+        });
+        cbMonitoras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbMonitorasActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Monitora:");
+
+        btImprimir.setBackground(new java.awt.Color(255, 255, 255));
+        btImprimir.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        btImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residencial/db/images/imprimir.png"))); // NOI18N
+        btImprimir.setBorder(null);
+        btImprimir.setBorderPainted(false);
+        btImprimir.setPreferredSize(new java.awt.Dimension(155, 50));
+        btImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btImprimirActionPerformed(evt);
+            }
+        });
+
+        panelStatus.setBackground(new java.awt.Color(102, 0, 180));
+        panelStatus.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Status", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 16), new java.awt.Color(255, 255, 255))); // NOI18N
+        panelStatus.setLayout(new java.awt.GridLayout(2, 0, 0, 10));
+
+        lbStatus.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbStatus.setForeground(new java.awt.Color(255, 255, 255));
+        lbStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbStatus.setText("Status:");
+        panelStatus.add(lbStatus);
+
+        lbHoraExtra.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        lbHoraExtra.setForeground(new java.awt.Color(255, 255, 255));
+        lbHoraExtra.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbHoraExtra.setText("00:00");
+        panelStatus.add(lbHoraExtra);
+
+        cbImprimirTodas.setBackground(new java.awt.Color(102, 0, 180));
+        cbImprimirTodas.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        cbImprimirTodas.setForeground(new java.awt.Color(255, 255, 255));
+        cbImprimirTodas.setText("Imprimir Todas");
+        cbImprimirTodas.setIconTextGap(10);
+        cbImprimirTodas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbImprimirTodasActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Salvar o relatório em:");
+
+        tfDiretorio.setEditable(false);
+        tfDiretorio.setColumns(1);
+        tfDiretorio.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        tfDiretorio.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+
+        btSelecionaDiretorio.setBackground(new java.awt.Color(255, 255, 255));
+        btSelecionaDiretorio.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residencial/db/images/seleciona.png"))); // NOI18N
+        btSelecionaDiretorio.setBorder(null);
+        btSelecionaDiretorio.setBorderPainted(false);
+        btSelecionaDiretorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSelecionaDiretorioActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel3)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbImprimirTodas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(cbMonitoras, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(tfDiretorio)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btSelecionaDiretorio, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel1)
+                .addGap(10, 10, 10)
+                .addComponent(cbMonitoras, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(panelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbImprimirTodas, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btSelecionaDiretorio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tfDiretorio))
+                .addContainerGap(113, Short.MAX_VALUE))
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 93;
+        gridBagConstraints.ipady = 92;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        getContentPane().add(jPanel2, gridBagConstraints);
+
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jScrollPane2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        tbDados.setAutoCreateRowSorter(true);
+        tbDados.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tbDados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -72,7 +230,10 @@ public class MonitorHoraExtra extends JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tbDados.setRowHeight(20);
+        tbDados.setGridColor(new java.awt.Color(255, 255, 255));
+        tbDados.setRowHeight(30);
+        tbDados.setRowMargin(0);
+        tbDados.setSelectionBackground(new java.awt.Color(102, 0, 180));
         tbDados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tbDadosMouseClicked(evt);
@@ -100,128 +261,73 @@ public class MonitorHoraExtra extends JInternalFrame {
             tbDados.getColumnModel().getColumn(5).setMaxWidth(90);
         }
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel1.setText("Monitora:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 977;
+        gridBagConstraints.ipady = 260;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
+        getContentPane().add(jScrollPane2, gridBagConstraints);
 
-        cbMonitoras.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cbMonitorasMouseClicked(evt);
-            }
-        });
-        cbMonitoras.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbMonitorasActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(cbMonitoras, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(219, 219, 219))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(cbMonitoras, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        lbStatus.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        lbStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbStatus.setText("STATUS");
-
-        lbHoraExtra.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        lbHoraExtra.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lbHoraExtra.setText("00:00");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lbHoraExtra, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lbStatus)
-                .addGap(18, 18, 18)
-                .addComponent(lbHoraExtra))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 283, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(102, 0, 180));
+        jLabel2.setText("Calculadora de Horas Extras");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.insets = new java.awt.Insets(50, 50, 20, 0);
+        getContentPane().add(jLabel2, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbMonitorasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMonitorasActionPerformed
+        if (atualizar) {
+            util.preecheComboMonitora(cbMonitoras);
+            atualizar = false;
+        }
         if (!cbMonitoras.getSelectedItem().equals("Selecione uma Monitora")) {
-            String[] id = cbMonitoras.getSelectedItem().toString().split("-");
-            banco.setMonitoraId(Integer.parseInt(id[0]));
-            banco.listarDadosPorMonitora(tbDados,lbHoraExtra, lbStatus);
-        }        
+            dadosMonitora = cbMonitoras.getSelectedItem().toString().split("-");
+            banco.setMonitoraId(Integer.parseInt(dadosMonitora[0]));
+            banco.listarDadosPorMonitora(tbDados, banco.getMonitoraId());
+            nomeRelatorio = dadosMonitora[1] + "_" + util.getDateTime();
 
-        if (tbDados.getRowCount() == 0) {
-            lbStatus.setVisible(false);
-            lbHoraExtra.setVisible(false);
+            if (tbDados.getRowCount() == 0) {
+                lbHoraExtra.setForeground(Color.white);
+                lbStatus.setForeground(Color.white);
+                lbStatus.setText("A monitora selecionada");
+                lbHoraExtra.setText("não tem horas extras cadastradas.");
+            } else {
+                lbHoraExtra.setText(banco.getTotalHoras());
+                if (banco.getStatus().equals("Crédito")) {
+                    lbHoraExtra.setForeground(new Color(0, 153, 51));
+                    lbStatus.setText(banco.getStatus());
+                    lbStatus.setForeground(new Color(0, 153, 51));
+                } else {
+                    lbHoraExtra.setForeground(Color.red);
+                    lbStatus.setText(banco.getStatus());
+                    lbStatus.setForeground(Color.red);
+                }
+            }
+
         } else {
-            lbStatus.setVisible(true);
-            lbHoraExtra.setVisible(true);
+            modelo.setNumRows(0);
+            lbHoraExtra.setForeground(Color.white);
+            lbStatus.setForeground(Color.white);
+            lbStatus.setText("Selecione uma monitora");
+            lbHoraExtra.setText("para calcular as horas extras.");
+        }
+
+        if (!cbMonitoras.getSelectedItem().equals("Selecione uma Monitora") && tbDados.getRowCount() == 0) {
+            lbHoraExtra.setForeground(Color.white);
+            lbStatus.setForeground(Color.white);
+            lbStatus.setText("A monitora selecionada");
+            lbHoraExtra.setText("não tem horas extras cadastradas.");
         }
     }//GEN-LAST:event_cbMonitorasActionPerformed
 
@@ -235,125 +341,90 @@ public class MonitorHoraExtra extends JInternalFrame {
     }//GEN-LAST:event_tbDadosMouseClicked
 
     private void cbMonitorasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbMonitorasMouseClicked
-        
+
     }//GEN-LAST:event_cbMonitorasMouseClicked
 
-    
+    private void btImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btImprimirActionPerformed
+
+        if (!tfDiretorio.getText().isEmpty()) {
+            //criamos um documento vazio
+            File file = new File("C:/Residencial");
+            file.mkdirs();
+            if (tbDados.getRowCount() == 0 && !imprimeTodas) {
+                JOptionPane.showMessageDialog(null, "Não existem dados para imprimir.");
+            } else {
+                try {
+                    rel.imprime(tfDiretorio.getText().replace("\\", "\\"), imprimeTodas, nomeRelatorio, tbDados, banco.getMonitoraId());
+//                Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", "start", "C://Residencial//" + nomeRelatorio + ".pdf"});
+                    Runtime.getRuntime().exec(new String[]{"cmd.exe", "/c", "start", "" + tfDiretorio.getText().replace("\\", "\\") + "", "" + tfDiretorio.getText() + "\\" + nomeRelatorio + ".pdf"});
+
+                } catch (IOException ex) {
+                    Logger.getLogger(MonitorHoraExtra.class.getName()).log(Level.SEVERE, null, ex);
+                    ex.printStackTrace();
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma pasta para salvar os relatórios");
+        }
+
+
+    }//GEN-LAST:event_btImprimirActionPerformed
+
+    private void cbImprimirTodasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbImprimirTodasActionPerformed
+        if (cbImprimirTodas.isSelected()) {
+            cbMonitoras.setEnabled(false);
+            nomeRelatorio = "Hora_Extra_Todas_Monitoras_" + util.getDateTime();
+            imprimeTodas = true;
+        } else {
+            cbMonitoras.setEnabled(true);
+            imprimeTodas = false;
+        }
+    }//GEN-LAST:event_cbImprimirTodasActionPerformed
+
+    private void btSelecionaDiretorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelecionaDiretorioActionPerformed
+        JFileChooser fc = new JFileChooser();
+        String dir = null;
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int res = fc.showOpenDialog(null);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            dir = file.getAbsolutePath();
+
+            banco.setDiretorio(dir.replace("\\","\\\\"));
+            if (tfDiretorio.getText().isEmpty()) {
+                banco.insertSource();
+            } else {
+                banco.updateSource();
+            }
+        }
+        tfDiretorio.setText(dir);
+    }//GEN-LAST:event_btSelecionaDiretorioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public static javax.swing.JComboBox<String> cbMonitoras;
+    private javax.swing.JButton btImprimir;
+    private javax.swing.JButton btSelecionaDiretorio;
+    private javax.swing.JCheckBox cbImprimirTodas;
+    public javax.swing.JComboBox<String> cbMonitoras;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lbHoraExtra;
     private javax.swing.JLabel lbStatus;
+    private javax.swing.JPanel panelStatus;
     private javax.swing.JTable tbDados;
+    private javax.swing.JTextField tfDiretorio;
     // End of variables declaration//GEN-END:variables
 
-   // public void mostrarTela(){        
-      //  setModal(true);         //A dialog tem que ser modal. S� pode retornar do setVisible ap�s ficar invis�vel.
-       // setLocationRelativeTo(null);
-       //setVisible(true);       //Mostramos a dialog e esperamos o usu�rio escolher alguma coisa.
-   // }  
-    
-    
-    /*public void calculaHoraExtra(){
-        int horaExtra = 0,
-            minutoExtra = 0,
-            horaCredito = 0,
-            minutoCredito = 0,
-            horaDebito = 0,
-            minutoDebito = 0,
-            horaAux = 0,
-            minutoAux = 0;
-        
+    public void limparCampos() {
+        cbImprimirTodas.setSelected(false);
+        cbMonitoras.setEnabled(true);
+        atualizar = true;
+        cbMonitoras.setSelectedIndex(0);
         modelo.setNumRows(0);
-        List<String> lista = bancoHoras.listarDados();
-        for(String m : lista) {
-            
-                
-                //PEGA A QUANTIDADE DE HORAS                
-                horaString = dados[4].substring(0,2);
-                minutoString = dados[4].substring(3,5);
-
-                
-                
-                if(dados[2].equals("Crédito")){
-                    horaAux = Integer.parseInt(horaString);
-                    minutoAux = Integer.parseInt(minutoString);
-                    horaCredito+=horaAux;
-                    minutoCredito+=minutoAux;
-                    //System.out.println("hora somada: "+horaExtra+":"+minutoExtra);
-                }else{
-                    horaAux = Integer.parseInt(horaString);
-                    minutoAux = Integer.parseInt(minutoString);
-                    horaDebito+=horaAux;
-                    minutoDebito+=minutoAux;
-                   //System.out.println("hora subtraida: "+horaExtra+":"+minutoExtra);
-                }               
-                
-                if(minutoCredito>=60){
-                    horaCredito+=1;
-                    minutoCredito = minutoCredito - 60;
-                }
-                
-                if(minutoDebito>=60){
-                    horaDebito+=1;
-                    minutoDebito = minutoDebito - 60;
-                }
-                                               
-                 
-            }
-        
-        lista.clear();
-        
-        horaExtra = horaCredito - horaDebito;
-        minutoExtra = minutoCredito - minutoDebito;
-        
-        if(minutoExtra<0){
-            horaExtra-=1;
-            minutoExtra = minutoExtra - (-60);
-        }
-        
-        horaString = String.valueOf(horaExtra);
-        minutoString = String.valueOf(minutoExtra);
-                
-        if(horaExtra>-10){
-            if(horaExtra<0){
-                horaString = String.valueOf(horaExtra*(-1));
-                horaString = "-0"+horaString;
-                System.out.println(horaString);
-            }
-            
-            if(horaExtra>0 && horaExtra<10){
-                horaString = "0"+horaString;
-            }
-            
-        }
-               
-        
-        if(minutoExtra<10){
-            minutoString = "0"+minutoString;
-        }
-        
-        if(horaExtra<0){
-            lbHoraExtra.setForeground(Color.red);
-            lbStatus.setText("DÉBITO");
-            lbStatus.setForeground(Color.red);
-        }else{
-            lbHoraExtra.setForeground(new Color(0,153,51));
-            lbStatus.setText("CRÉDITO");
-            lbStatus.setForeground(new Color(0,153,51));
-        }
-        
-        lbHoraExtra.setText(horaString+":"+minutoString);
-        
-    }*/
-
-    
-    
-    
-        
+        lbStatus.setText("Selecione uma monitora");
+        lbHoraExtra.setText("para calcular as horas extras.");
+        click = false;
+    }
 }

@@ -22,6 +22,8 @@ public class ResidencialIasp extends javax.swing.JFrame {
     MonitorHoraExtra monitor;
     CadMonitoras cadMonitoras;
     CadHoraExtra cadHoraExtra;
+    public static boolean telaMonitor = false;
+
     public ResidencialIasp() {
         initComponents();
         setLocationRelativeTo(null);
@@ -67,13 +69,13 @@ public class ResidencialIasp extends javax.swing.JFrame {
         panelHoraExtra.setLayout(new java.awt.GridBagLayout());
 
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residencial.db.images/entrada.png"))); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residencial/db/images/relogio.png"))); // NOI18N
         jLabel2.setPreferredSize(new java.awt.Dimension(60, 50));
         panelHoraExtra.add(jLabel2, new java.awt.GridBagConstraints());
 
         btCadHoraExtra.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btCadHoraExtra.setForeground(new java.awt.Color(255, 255, 255));
-        btCadHoraExtra.setText("Cadastrar Hora Extra");
+        btCadHoraExtra.setText("Gerenciar Hora Extra");
         btCadHoraExtra.setPreferredSize(new java.awt.Dimension(240, 60));
         btCadHoraExtra.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -98,13 +100,13 @@ public class ResidencialIasp extends javax.swing.JFrame {
         panelMonitoras.setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residencial.db.images/entrada.png"))); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residencial/db/images/monitora.png"))); // NOI18N
         jLabel1.setPreferredSize(new java.awt.Dimension(60, 50));
         panelMonitoras.add(jLabel1, new java.awt.GridBagConstraints());
 
         btCadMonitoras.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btCadMonitoras.setForeground(new java.awt.Color(255, 255, 255));
-        btCadMonitoras.setText("Cadastrar Monitoras");
+        btCadMonitoras.setText("Gerenciar Monitoras");
         btCadMonitoras.setPreferredSize(new java.awt.Dimension(240, 60));
         btCadMonitoras.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -129,7 +131,7 @@ public class ResidencialIasp extends javax.swing.JFrame {
         panelMonitorHoras.setLayout(new java.awt.GridBagLayout());
 
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residencial.db.images/entrada.png"))); // NOI18N
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residencial/db/images/consultar.png"))); // NOI18N
         jLabel3.setPreferredSize(new java.awt.Dimension(60, 50));
         panelMonitorHoras.add(jLabel3, new java.awt.GridBagConstraints());
 
@@ -157,8 +159,9 @@ public class ResidencialIasp extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText("Sair");
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residencial/db/images/sair.png"))); // NOI18N
+        jLabel4.setText("  Sair");
         jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel4MouseClicked(evt);
@@ -172,19 +175,19 @@ public class ResidencialIasp extends javax.swing.JFrame {
             .addGroup(panelMenuLayout.createSequentialGroup()
                 .addComponent(panelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMenuLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(panelMenuLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(jLabel4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelMenuLayout.setVerticalGroup(
             panelMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelMenuLayout.createSequentialGroup()
-                .addGap(175, 175, 175)
-                .addComponent(panelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 222, Short.MAX_VALUE)
+                .addContainerGap()
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(109, 109, 109)
+                .addComponent(panelBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(413, Short.MAX_VALUE))
         );
 
         deskTop.setBackground(new java.awt.Color(255, 255, 255));
@@ -193,7 +196,7 @@ public class ResidencialIasp extends javax.swing.JFrame {
         deskTop.setLayout(deskTopLayout);
         deskTopLayout.setHorizontalGroup(
             deskTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 766, Short.MAX_VALUE)
+            .addGap(0, 724, Short.MAX_VALUE)
         );
         deskTopLayout.setVerticalGroup(
             deskTopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,88 +222,92 @@ public class ResidencialIasp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btCadMonitorasMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCadMonitorasMouseEntered
-        panelMonitoras.setBackground(new Color(102,0,180));
+        panelMonitoras.setBackground(new Color(102, 0, 180));
     }//GEN-LAST:event_btCadMonitorasMouseEntered
 
     private void btCadMonitorasMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCadMonitorasMouseExited
-        panelMonitoras.setBackground(new Color(102,0,153));
+        panelMonitoras.setBackground(new Color(102, 0, 153));
     }//GEN-LAST:event_btCadMonitorasMouseExited
 
     private void btCadHoraExtraMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCadHoraExtraMouseEntered
-        panelHoraExtra.setBackground(new Color(102,0,180));
+        panelHoraExtra.setBackground(new Color(102, 0, 180));
     }//GEN-LAST:event_btCadHoraExtraMouseEntered
 
     private void btCadHoraExtraMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCadHoraExtraMouseExited
-        panelHoraExtra.setBackground(new Color(102,0,153));
+        panelHoraExtra.setBackground(new Color(102, 0, 153));
     }//GEN-LAST:event_btCadHoraExtraMouseExited
 
     private void btMonitorHoraExtraMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btMonitorHoraExtraMouseEntered
-        panelMonitorHoras.setBackground(new Color(102,0,180));
+        panelMonitorHoras.setBackground(new Color(102, 0, 180));
     }//GEN-LAST:event_btMonitorHoraExtraMouseEntered
 
     private void btMonitorHoraExtraMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btMonitorHoraExtraMouseExited
-        panelMonitorHoras.setBackground(new Color(102,0,153));
+        panelMonitorHoras.setBackground(new Color(102, 0, 153));
     }//GEN-LAST:event_btMonitorHoraExtraMouseExited
 
     private void btCadMonitorasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCadMonitorasMouseClicked
-        if (cadMonitoras == null){
+        if (cadMonitoras == null) {
 
             cadMonitoras = new CadMonitoras();
             deskTop.moveToFront(cadMonitoras);
             deskTop.add(cadMonitoras);
 
-        }else
-        deskTop.moveToFront(cadMonitoras);
-        //monitor.desabilitaCampos();
-        //}
+        } else {
+            deskTop.moveToFront(cadMonitoras);
+            cadMonitoras.limparCampos();
+        }
         try {
             cadMonitoras.setMaximum(true);
         } catch (PropertyVetoException ex) {
             ex.printStackTrace();
         }
         cadMonitoras.setVisible(true);
-        cadMonitoras.setBorder(new EmptyBorder(new Insets(-25,0,0,0)));
+        cadMonitoras.setBorder(new EmptyBorder(new Insets(-25, 0, 0, 0)));
+        ((BasicInternalFrameUI) cadMonitoras.getUI()).setNorthPane(null);
     }//GEN-LAST:event_btCadMonitorasMouseClicked
 
     private void btCadHoraExtraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btCadHoraExtraMouseClicked
-        if (cadHoraExtra == null){
+        if (cadHoraExtra == null) {
 
             cadHoraExtra = new CadHoraExtra();
             deskTop.moveToFront(cadHoraExtra);
             deskTop.add(cadHoraExtra);
 
-        }else
-        deskTop.moveToFront(cadHoraExtra);
-        //monitor.desabilitaCampos();
-        //}
+        } else {
+            deskTop.moveToFront(cadHoraExtra);
+            cadHoraExtra.limparCampos();
+        }
         try {
             cadHoraExtra.setMaximum(true);
         } catch (PropertyVetoException ex) {
             ex.printStackTrace();
         }
         cadHoraExtra.setVisible(true);
-        cadHoraExtra.setBorder(new EmptyBorder(new Insets(-25,0,0,0)));
+        cadHoraExtra.setBorder(new EmptyBorder(new Insets(-25, 0, 0, 0)));
         ((BasicInternalFrameUI) cadHoraExtra.getUI()).setNorthPane(null);
+
     }//GEN-LAST:event_btCadHoraExtraMouseClicked
 
     private void btMonitorHoraExtraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btMonitorHoraExtraMouseClicked
-        if (monitor == null){
+        if (monitor == null) {
 
             monitor = new MonitorHoraExtra();
             deskTop.moveToFront(monitor);
             deskTop.add(monitor);
 
-        }else
-        deskTop.moveToFront(monitor);
-        //monitor.desabilitaCampos();
-        //}
+        } else {
+            deskTop.moveToFront(monitor);
+            telaMonitor = true; // se a tela for chamada mais de uma vez
+            monitor.limparCampos();
+        }
         try {
             monitor.setMaximum(true);
         } catch (PropertyVetoException ex) {
             ex.printStackTrace();
         }
         monitor.setVisible(true);
-        monitor.setBorder(new EmptyBorder(new Insets(-25,0,0,0)));
+        monitor.setBorder(new EmptyBorder(new Insets(-25, 0, 0, 0)));
+        ((BasicInternalFrameUI) monitor.getUI()).setNorthPane(null);
     }//GEN-LAST:event_btMonitorHoraExtraMouseClicked
 
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
@@ -318,6 +325,7 @@ public class ResidencialIasp extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                
                 if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;

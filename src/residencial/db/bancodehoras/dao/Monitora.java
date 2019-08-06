@@ -46,8 +46,8 @@ public class Monitora {
         
         try{
             conn = conMonitora.abrir();
-            
-            String insert = "INSERT INTO MONITORAS VALUES (null,'"+getNomeMonitora()+"','"+getStatus()+"')";
+            codAutomatico();
+            String insert = "INSERT INTO MONITORAS VALUES ("+getMonitoraId()+",'"+getNomeMonitora()+"','"+getStatus()+"')";
                     PreparedStatement stmt = (PreparedStatement)conn.prepareStatement(insert);
                     stmt.executeUpdate();
                     JOptionPane.showMessageDialog(null, "Monitora cadastrada com sucesso");
@@ -138,6 +138,21 @@ public class Monitora {
             conMonitora.fechar();
             
         }
+    }
+    
+    public void codAutomatico() {
+
+        try {
+            conMonitora.executeSQL("SELECT MAX(MonitoraId) FROM MONITORAS");
+            conMonitora.result.first();
+            int codigo = conMonitora.result.getInt(1);
+            setMonitoraId(codigo + 1);
+        } catch (Exception erro) {
+            int nro = 1;
+            setMonitoraId(nro);
+
+        }
+
     }
 
     

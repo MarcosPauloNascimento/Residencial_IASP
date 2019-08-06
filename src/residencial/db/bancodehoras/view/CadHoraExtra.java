@@ -7,11 +7,12 @@ package residencial.db.bancodehoras.view;
 
 import java.awt.Color;
 import java.awt.Font;
-import residencial.db.bancodehoras.view.*;
 import java.awt.event.KeyEvent;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import javax.swing.JFrame;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -24,19 +25,22 @@ import residencial.db.util.Utilitarios;
  * @author Marcos Paulo
  */
 public class CadHoraExtra extends JInternalFrame {
-
+    
     BancoDeHoras banco = new BancoDeHoras();
     Utilitarios util = new Utilitarios();
     boolean click = false;
+
     public CadHoraExtra() {
         initComponents();
         util.preecheComboMonitora(cbMonitoras);
         banco.listarDados(tbDados);
         JTableHeader header = new JTableHeader();
         header.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        header.setBackground(new Color(102,0,180));
+        header.setBackground(new Color(102, 0, 180));
         header.setForeground(Color.white);
-        
+        btSalvar.setBackground(new Color(0, 0, 0, 0));
+        btApagar.setBackground(new Color(0, 0, 0, 0));
+        btApagar.setEnabled(false);
     }
 
     /**
@@ -68,23 +72,24 @@ public class CadHoraExtra extends JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         tfQtdeHoras = new javax.swing.JTextField();
         dpData = new org.jdesktop.swingx.JXDatePicker();
+        btApagar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(null);
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jScrollPane2.setForeground(new java.awt.Color(255, 255, 255));
+        jScrollPane2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         tbDados.setAutoCreateRowSorter(true);
         tbDados.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
         tbDados.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tbDados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+
             },
             new String [] {
                 "Código", "Data", "Monitora", "Tipo", "Hora Saída", "Hora Entrada", "Qtda Horas", "Justificativa"
@@ -135,7 +140,21 @@ public class CadHoraExtra extends JInternalFrame {
             tbDados.getColumnModel().getColumn(6).setMaxWidth(90);
         }
 
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 793;
+        gridBagConstraints.ipady = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 20, 10, 20);
+        getContentPane().add(jScrollPane2, gridBagConstraints);
+
         jPanel5.setBackground(new java.awt.Color(102, 0, 180));
+        jPanel5.setPreferredSize(new java.awt.Dimension(354, 380));
         jPanel5.setLayout(new java.awt.GridBagLayout());
 
         jLabel7.setBackground(new java.awt.Color(255, 255, 255));
@@ -146,6 +165,7 @@ public class CadHoraExtra extends JInternalFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 0);
         jPanel5.add(jLabel7, gridBagConstraints);
 
@@ -162,7 +182,6 @@ public class CadHoraExtra extends JInternalFrame {
         gridBagConstraints.gridwidth = 4;
         gridBagConstraints.ipadx = 182;
         gridBagConstraints.ipady = 15;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 0);
         jPanel5.add(cbMonitoras, gridBagConstraints);
 
@@ -235,7 +254,7 @@ public class CadHoraExtra extends JInternalFrame {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 150;
-        gridBagConstraints.ipady = 15;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 0);
         jPanel5.add(tfHoraEntrada, gridBagConstraints);
@@ -269,7 +288,7 @@ public class CadHoraExtra extends JInternalFrame {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 150;
-        gridBagConstraints.ipady = 15;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
         jPanel5.add(tfHoraSaida, gridBagConstraints);
@@ -287,7 +306,10 @@ public class CadHoraExtra extends JInternalFrame {
         jPanel5.add(jLabel5, gridBagConstraints);
 
         btSalvar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btSalvar.setText("Salvar");
+        btSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residencial/db/images/salvar.png"))); // NOI18N
+        btSalvar.setBorder(null);
+        btSalvar.setBorderPainted(false);
+        btSalvar.setOpaque(false);
         btSalvar.setPreferredSize(new java.awt.Dimension(125, 50));
         btSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -298,12 +320,13 @@ public class CadHoraExtra extends JInternalFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
         gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.ipadx = 31;
-        gridBagConstraints.insets = new java.awt.Insets(10, 50, 10, 0);
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(0, 50, 10, 0);
         jPanel5.add(btSalvar, gridBagConstraints);
 
         taJustificativa.setColumns(10);
-        taJustificativa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        taJustificativa.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         taJustificativa.setRows(5);
         jScrollPane1.setViewportView(taJustificativa);
 
@@ -311,10 +334,10 @@ public class CadHoraExtra extends JInternalFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = 8;
-        gridBagConstraints.ipadx = 558;
+        gridBagConstraints.ipadx = 548;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.weightx = 0.4;
-        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.weighty = 0.3;
         gridBagConstraints.insets = new java.awt.Insets(10, 50, 0, 0);
         jPanel5.add(jScrollPane1, gridBagConstraints);
 
@@ -346,53 +369,59 @@ public class CadHoraExtra extends JInternalFrame {
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 150;
-        gridBagConstraints.ipady = 15;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 20, 0, 0);
         jPanel5.add(tfQtdeHoras, gridBagConstraints);
 
         dpData.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         dpData.setFormats("dd/MM/yyyy");
-        dpData.setPreferredSize(new java.awt.Dimension(150, 30));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = 2;
         gridBagConstraints.ipadx = 8;
-        gridBagConstraints.ipady = 13;
+        gridBagConstraints.ipady = 10;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         gridBagConstraints.insets = new java.awt.Insets(10, 18, 0, 0);
         jPanel5.add(dpData, gridBagConstraints);
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btApagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/residencial/db/images/apagar.png"))); // NOI18N
+        btApagar.setBorder(null);
+        btApagar.setBorderPainted(false);
+        btApagar.setPreferredSize(new java.awt.Dimension(125, 50));
+        btApagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btApagarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.ipadx = 30;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 10, 0);
+        jPanel5.add(btApagar, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 93;
+        gridBagConstraints.ipady = 95;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        getContentPane().add(jPanel5, gridBagConstraints);
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(102, 0, 180));
         jLabel8.setText("Cadastro de Horas Extras");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 836, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(jLabel8)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2)
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(31, Short.MAX_VALUE)
-                .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(50, 50, 20, 0);
+        getContentPane().add(jLabel8, gridBagConstraints);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -412,34 +441,26 @@ public class CadHoraExtra extends JInternalFrame {
     }//GEN-LAST:event_cbTipoActionPerformed
 
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
-        if(cbMonitoras.getSelectedItem().equals("Selecione uma Monitora")){
-            JOptionPane.showMessageDialog(null,"Selecione a Monitora");
-                        
-        }else if(cbTipo.getSelectedItem().equals("Selecione o Tipo")){
-            JOptionPane.showMessageDialog(null,"Selecione o Tipo");
+        if (cbMonitoras.getSelectedItem().equals("Selecione uma Monitora")) {
+            JOptionPane.showMessageDialog(null, "Selecione a Monitora");
             
-        }else if(tfHoraEntrada.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null,"Digite a Hora de Entrada");
-            tfHoraEntrada.requestFocus(true);
-                        
-        }else if(tfHoraSaida.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null,"Digite a Hora de Saída");
-            tfHoraSaida.requestFocus(true);
-                        
-        }else if(tfQtdeHoras.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null,"Digite a Quantidade de Horas");
+        } else if (cbTipo.getSelectedItem().equals("Selecione o Tipo")) {
+            JOptionPane.showMessageDialog(null, "Selecione o Tipo");
+            
+        } else if (tfQtdeHoras.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite a Quantidade de Horas");
             tfQtdeHoras.requestFocus(true);
             
-        }else if(String.valueOf(dpData.getDate()).equals("")){
-            JOptionPane.showMessageDialog(null,"Preencha a Data");
+        } else if (String.valueOf(dpData.getDate()).equals("")) {
+            JOptionPane.showMessageDialog(null, "Preencha a Data");
             dpData.requestFocus(true);
             
-        }else if(taJustificativa.getText().isEmpty()){
-            JOptionPane.showMessageDialog(null,"Digite uma justificativa");
+        } else if (taJustificativa.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Digite uma justificativa");
             taJustificativa.requestFocus(true);
-        }else {
+        } else {
             insert_update();
-        }      
+        }        
     }//GEN-LAST:event_btSalvarActionPerformed
 
     private void tfHoraEntradaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfHoraEntradaKeyReleased
@@ -457,8 +478,8 @@ public class CadHoraExtra extends JInternalFrame {
     }//GEN-LAST:event_tfHoraSaidaKeyReleased
 
     private void tfHoraSaidaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfHoraSaidaFocusLost
-        if(!tfHoraSaida.getText().isEmpty() && !validaHora(tfHoraSaida.getText())){
-            JOptionPane.showMessageDialog(null,"Hora Inválida");
+        if (!tfHoraSaida.getText().isEmpty() && !validaHora(tfHoraSaida.getText())) {
+            JOptionPane.showMessageDialog(null, "Hora Inválida");
             tfHoraSaida.setText("");
             tfHoraSaida.requestFocus(true);
         }
@@ -472,16 +493,16 @@ public class CadHoraExtra extends JInternalFrame {
     }//GEN-LAST:event_tfQtdeHorasKeyReleased
 
     private void tfHoraEntradaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfHoraEntradaFocusLost
-        if(!tfHoraEntrada.getText().isEmpty() && !validaHora(tfHoraEntrada.getText())){
-            JOptionPane.showMessageDialog(null,"Hora Inválida");
+        if (!tfHoraEntrada.getText().isEmpty() && !validaHora(tfHoraEntrada.getText())) {
+            JOptionPane.showMessageDialog(null, "Hora Inválida");
             tfHoraEntrada.setText("");
             tfHoraEntrada.requestFocus(true);
         }
     }//GEN-LAST:event_tfHoraEntradaFocusLost
 
     private void tfQtdeHorasFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfQtdeHorasFocusLost
-        if(!tfQtdeHoras.getText().isEmpty() && !validaHora(tfQtdeHoras.getText())){
-            JOptionPane.showMessageDialog(null,"Hora Inválida");
+        if (!tfQtdeHoras.getText().isEmpty() && !validaHora(tfQtdeHoras.getText())) {
+            JOptionPane.showMessageDialog(null, "Hora Inválida");
             tfQtdeHoras.setText("");
             tfQtdeHoras.requestFocus(true);
         }
@@ -489,11 +510,17 @@ public class CadHoraExtra extends JInternalFrame {
 
     private void tbDadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbDadosMouseClicked
         int linha = tbDados.getSelectedRow();
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
         if (evt.getClickCount() == 1) {
             click = true;
-
-            banco.setBancoId(Integer.parseInt(tbDados.getValueAt(linha,0).toString()));
-            //Data.setText(tbDados.getValueAt(linha, 1).toString());
+            btApagar.setEnabled(true);
+            banco.setBancoId(Integer.parseInt(tbDados.getValueAt(linha, 0).toString()));
+            banco.setNomeMonitora(tbDados.getValueAt(linha, 2).toString());
+            try {
+                dpData.setDate(df.parse(tbDados.getValueAt(linha, 1).toString()));
+            } catch (ParseException ex) {
+                Logger.getLogger(CadHoraExtra.class.getName()).log(Level.SEVERE, null, ex);
+            }
             cbMonitoras.setSelectedItem(tbDados.getValueAt(linha, 2).toString());
             cbTipo.setSelectedItem(tbDados.getValueAt(linha, 3).toString());
             tfHoraEntrada.setText(tbDados.getValueAt(linha, 4).toString());
@@ -511,9 +538,14 @@ public class CadHoraExtra extends JInternalFrame {
         
     }//GEN-LAST:event_tbDadosMouseEntered
 
-    
+    private void btApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btApagarActionPerformed
+        banco.delete();
+        limparCampos();
+    }//GEN-LAST:event_btApagarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btApagar;
     private javax.swing.JButton btSalvar;
     public javax.swing.JComboBox<String> cbMonitoras;
     private javax.swing.JComboBox<String> cbTipo;
@@ -536,12 +568,12 @@ public class CadHoraExtra extends JInternalFrame {
     private javax.swing.JTextField tfQtdeHoras;
     // End of variables declaration//GEN-END:variables
 
-    public void formataHora(JTextField tfHora, java.awt.event.KeyEvent evt){
+    public void formataHora(JTextField tfHora, java.awt.event.KeyEvent evt) {
         char[] c = tfHora.getText().toCharArray();
         for (int i = 0; i < c.length; i++) {
             // verifica se o char não é um dígito
             if (Character.isDigit(c[i]) || c[i] == ':') {
-
+                
                 if (evt.getKeyCode() != KeyEvent.VK_BACK_SPACE) {
                     String formata = tfHora.getText();
                     if (formata.length() == 2) {
@@ -554,7 +586,7 @@ public class CadHoraExtra extends JInternalFrame {
                         tfHora.setText(formata);
                     }
                 }
-
+                
             } else {
                 tfHora.setText(tfHora.getText().substring(0, tfHora.getText().length() - 1));
                 break;
@@ -562,23 +594,23 @@ public class CadHoraExtra extends JInternalFrame {
         }
     }
     
-    public boolean validaHora(String hora){
+    public boolean validaHora(String hora) {
         boolean result = false;
         int h, m;
-        if(hora.length()==5){
+        if (hora.length() == 5) {
             String[] hm = hora.split(":");
             h = Integer.parseInt(hm[0]);
             m = Integer.parseInt(hm[1]);
-            if(h<=23 && m<=59){                
+            if (h <= 23 && m <= 59) {                
                 result = true;
             }
         }
         return result;
     }
     
-    public void insert_update(){
+    public void insert_update() {
         String[] id = cbMonitoras.getSelectedItem().toString().split("-");
-        banco.setMonitoraId(Integer.parseInt(id[0]));           
+        banco.setMonitoraId(Integer.parseInt(id[0]));        
         banco.setData(util.converteData(new SimpleDateFormat("dd/MM/yyyy").format(dpData.getDate())));
         banco.setTipo((String) cbTipo.getSelectedItem());
         banco.setJustificativa(taJustificativa.getText());
@@ -593,6 +625,13 @@ public class CadHoraExtra extends JInternalFrame {
         }
         banco.listarDados(tbDados);
         
+        limparCampos();
+        
+    }    
+    
+    public void limparCampos() {
+        banco.listarDados(tbDados);
+        util.preecheComboMonitora(cbMonitoras);
         cbMonitoras.setSelectedIndex(0);
         dpData.cancelEdit();
         cbTipo.setSelectedIndex(0);
@@ -600,8 +639,8 @@ public class CadHoraExtra extends JInternalFrame {
         tfQtdeHoras.setText("");
         tfHoraEntrada.setText("");
         tfHoraSaida.setText("");
+        btApagar.setEnabled(false);
         click = false;
-         
-     }   
+    }
     
 }
